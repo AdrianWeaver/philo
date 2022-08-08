@@ -6,6 +6,7 @@
 *.ko
 *.obj
 *.elf
+objects/*
 
 # Linker output
 *.ilk
@@ -29,12 +30,14 @@
 *.dylib
 
 # Executables
+philo
 *.exe
 *.out
 *.app
 *.i*86
 *.x86_64
 *.hex
+philo
 
 # Debug files
 *.dSYM/
@@ -50,3 +53,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Vim files
+*.swp
+*.swo
+*tags
