@@ -38,6 +38,8 @@ philo
 *.x86_64
 *.hex
 philo
+!philo/
+philo_sanitize
 
 # Debug files
 *.dSYM/

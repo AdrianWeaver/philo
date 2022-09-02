@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 10:50:38 by aweaver           #+#    #+#             */
-/*   Updated: 2022/08/05 10:50:38 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/01 17:57:39 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,9 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <pthread.h>
+#include <stdlib.h>
 
-int	ft_create_structure(t_philo *data, char **argv)
-{
-	data->number_of_philosophers = ft_atoi(argv[1]);
-	data->time_to_die = ft_atoi(argv[2]);
-	data->time_to_eat = ft_atoi(argv[3]);
-	data->time_to_sleep = ft_atoi(argv[4]);
-	data->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
-	if (data->number_of_philosophers <= 0 || data->time_to_die <= 0
-		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0
-		|| data->number_of_times_each_philosopher_must_eat <= 0)
-	{
-		write(2, "Please provide positive values only\n", 36);
-		return (-1);
-	}
-	if (data->number_of_philosophers == 1)
-	{
-		write(2, "Why so sadistic?!\n", 18);
-		return (-1);
-	}
-	return (0);
-}
-
-int	ft_secure_gettime_ms(long int *time)
-{
-	struct timeval	t_timeval;
-
-	if (gettimeofday(&t_timeval, NULL) == -1)
-	{
-		write(2, "gettimeofday failed\n", 21);
-		return (1);
-	}
-	*time = t_timeval.tv_usec;
-	return (0);
-}
-
-int	ft_core_program(t_philo *data)
+int	ft_core_program(t_data *data)
 {
 	long int				start;
 	long int				current_time;
@@ -66,7 +32,6 @@ int	ft_core_program(t_philo *data)
 	printf("start = %ld\n", start);
 	printf("current = %ld\n", current_time);
 	printf("time_spent = %ld\n", current_time - start);
-	//pthread_create();
 	(void)data;
 	return (0);
 }
@@ -98,13 +63,21 @@ int	ft_check_args(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	t_philo	data;
+	t_data		*data;
+	t_list		*list;
 
+	list = NULL;
+	data = NULL;
 	if (ft_check_args(argc, argv) == -1)
 		return (1);
 	if (ft_create_structure(&data, argv) == -1)
-		return (1);
-	if (ft_core_program(&data) == 1)
-		return (1);
+		return (2);
+	if (ft_create_philo_list(&data, &list) == -1)
+		return (3);
+	if (ft_create_threads(&list) == -1)
+		return (4);
+	if (ft_core_program(data) == 1)
+		return (5);
+	printf("Exited everything went ok\n");
 	return (0);
 }
