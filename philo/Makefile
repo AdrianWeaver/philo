@@ -12,6 +12,7 @@ SRCS			=	main.c\
 					list_init.c\
 					time_functions.c\
 					threads_functions.c\
+					messages.c\
 					philo_utils2.c
 
 OBJS			=	$(addprefix $(OBJS_PATH), $(SRCS:.c=.o))
@@ -42,10 +43,10 @@ re:					fclean
 					@make $(NAME)
 
 test:				$(NAME)
-					./$(NAME) "2" "2" "3" "4" "5"
+					./$(NAME) "5" "410" "200" "100" "5"
 
 vtest:				$(NAME)
-					valgrind ./$(NAME) "2" "2" "3" "4" "5"
+					valgrind ./$(NAME) "5" "410" "200" "100" "5"
 
 sanitize:			$(SANITIZE_NAME)
 					./$(NAME) "2" "2" "3" "4" "5"

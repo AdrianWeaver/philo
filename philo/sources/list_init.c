@@ -45,7 +45,8 @@ int	ft_check_philo(t_list *list)
 	t_philo	*philo;
 
 	i = 0;
-	while (list)
+	philo = (t_philo *)list->content;
+	while (i < philo->data->number_of_philosophers)
 	{
 		philo = (t_philo *)list->content;
 		if (DEBUG && DEBUG_DATA)
@@ -59,31 +60,55 @@ int	ft_check_philo(t_list *list)
 	return (0);
 }
 
+void	ft_init_philo_failed(int i, t_list *list)
+{
+	t_philo	*philo;
+
+	while (i > 0)
+	{
+		philo = (t_philo *)list->content;
+		pthread_mutex_destroy(&(philo->m_fork));
+		i--;
+	}
+}
+
+int	ft_init_philo_list(int i, t_philo *new_philo, t_list *list, t_data *data)
+{
+	new_philo->data = data;
+	new_philo->thread_id = i;
+	new_philo->philo_nb = i;
+	new_philo->last_meal = data->start;
+	if (pthread_mutex_init(&(new_philo->m_fork), NULL))
+	{
+		ft_init_philo_failed(i, list);
+		return (1);
+	}
+	return (0);
+}
+
 int	ft_create_philo_list(t_data **data, t_list **list)
 {
 	t_list	*new;
 	t_philo	*new_philo;
+	t_list	*last;
 	int		i;
 
 	i = 0;
-	if (DEBUG)
-	{
-		printf("CREATE_PHILO_LIST A:\n");
-		printf("A:number of philos address = %p\n",
-			&(*data)->number_of_philosophers);
-		printf("A:number of philos = %d\n", (*data)->number_of_philosophers);
-	}
 	while (i < (*data)->number_of_philosophers)
 	{
 		new_philo = malloc(sizeof(*new_philo) * 1);
 		if (new_philo == NULL)
 			return (-1);
-		new_philo->data = *data;
-		new_philo->thread_id = i;
+		if (ft_init_philo_list(i, new_philo, *list, *data) == -1)
+		{
+			return (1);
+		}
 		new = ft_lstnew((void *)new_philo);
 		ft_lstadd_back(list, new);
 		i++;
 	}
+	last = ft_lstlast(*list);
+	last->next = *list;
 	ft_check_philo(*list);
 	return (0);
 }
@@ -96,6 +121,7 @@ int	ft_create_structure(t_data **data, char **argv)
 	(*data)->time_to_eat = ft_atoi(argv[3]);
 	(*data)->time_to_sleep = ft_atoi(argv[4]);
 	(*data)->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
+	(*data)->reaper = 0;
 	if ((*data)->number_of_philosophers <= 0 || (*data)->time_to_die <= 0
 		|| (*data)->time_to_eat <= 0 || (*data)->time_to_sleep <= 0
 		|| (*data)->number_of_times_each_philosopher_must_eat <= 0)

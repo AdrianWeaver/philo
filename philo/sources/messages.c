@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time_functions.c                                   :+:      :+:    :+:   */
+/*   messages.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/25 18:33:29 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/01 14:45:09 by aweaver          ###   ########.fr       */
+/*   Created: 2022/09/02 16:03:41 by aweaver           #+#    #+#             */
+/*   Updated: 2022/09/02 16:03:41 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <pthread.h>
+#include <stdio.h>
 
-time_t	ft_get_current_time(const t_data *data)
+void	ft_msg_fork(t_list *list)
 {
+	t_philo	*philo;
 	time_t	current;
 
-	if (ft_secure_gettime_ms(&current) == 1)
-		return (0);
-	return (current - data->start);
-}
-
-int	ft_secure_gettime_ms(long int *time)
-{
-	struct timeval	t_timeval;
-
-	if (gettimeofday(&t_timeval, NULL) == -1)
-	{
-		write(2, "gettimeofday failed\n", 21);
-		return (1);
-	}
-	*time = (t_timeval.tv_sec * 1000) + (t_timeval.tv_usec / 1000);
-	return (0);
+	philo = list->content;
+	current = ft_get_current_time(philo->data);
+	pthread_mutex_lock(&(philo->data->is_writing));
+	printf("%ld %i has taken a fork\n", current, philo->philo_nb);
+	pthread_mutex_unlock(&(philo->data->is_writing));
 }

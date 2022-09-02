@@ -21,8 +21,8 @@
 
 # define T_PHILO "(t_philo *)list->content"
 # define DEBUG 1
-# define DEBUG_DATA 1
-# define DEBUG_DATA_ADDRESS 1
+# define DEBUG_DATA 0
+# define DEBUG_DATA_ADDRESS 0
 
 typedef struct s_list
 {
@@ -37,6 +37,7 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				number_of_times_each_philosopher_must_eat;
+	int				reaper;
 	pthread_mutex_t	is_writing;
 	time_t			start;
 }				t_data;
@@ -44,7 +45,10 @@ typedef struct s_data
 typedef struct s_philo
 {
 	pthread_t		thread_id;
+	int				philo_nb;
 	t_data			*data;
+	pthread_mutex_t	m_fork;
+	time_t			last_meal;
 	int				fork;
 }			t_philo;
 
@@ -64,12 +68,15 @@ t_list		*ft_lstlast(t_list *lst);
 int			ft_create_philo_list(t_data **data, t_list **list);
 int			ft_create_structure(t_data **data, char **argv);
 
-int			ft_get_current_time(const time_t start, time_t time);
+time_t		ft_get_current_time(const t_data *data);
 int			ft_secure_gettime_ms(long int *time);
 
 //THREAD FUNCTIONS
 int			ft_create_threads(t_list **list);
 int			ft_join_threads(t_list *list);
 void		*ft_routine(void *arg);
+
+//MESSAGES
+void		ft_msg_fork(t_list *list);
 
 #endif
