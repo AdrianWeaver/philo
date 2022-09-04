@@ -21,11 +21,11 @@ int	ft_lstsize(t_list *lst)
 	i = 0;
 	while (lst)
 	{
+		i++;
 		if (lst->next != start)
 			lst = lst->next;
 		else
 			return (i);
-		i++;
 	}
 	return (i);
 }
