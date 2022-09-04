@@ -16,23 +16,10 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-int	ft_core_program(t_data *data)
+int	ft_set_time(t_data *data)
 {
-	long int				start;
-	long int				current_time;
-	int						i;
-
-	i = 0;
-	if (ft_secure_gettime_ms(&start) == -1)
+	if (ft_secure_gettime_ms(&(data->start)) == -1)
 		return (-1);
-	while (i < 1)
-		i++;
-	if (ft_secure_gettime_ms(&current_time) == -1)
-		return (-1);
-	printf("core start = %ld\n", start);
-	printf("core curr  = %ld\n", current_time);
-	printf("time_spent = %ld\n", current_time - start);
-	(void)data;
 	return (0);
 }
 
@@ -72,11 +59,11 @@ int	main(int argc, char **argv)
 		return (1);
 	if (ft_create_structure(&data, argv) == -1)
 		return (2);
-	if (ft_create_philo_list(&data, &list) == -1)
+	if (ft_set_time(data) == -1)
 		return (3);
-	if (ft_create_threads(&list) == -1)
+	if (ft_create_philo_list(&data, &list) == -1)
 		return (4);
-	if (ft_core_program(data) == 1)
+	if (ft_create_threads(&list) == -1)
 		return (5);
 	printf("Exited everything went ok\n");
 	return (0);

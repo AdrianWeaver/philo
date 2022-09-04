@@ -23,6 +23,7 @@
 # define DEBUG 1
 # define DEBUG_DATA 0
 # define DEBUG_DATA_ADDRESS 0
+# define DEBUG_ROUTINE 0
 
 typedef struct s_list
 {
@@ -74,8 +75,12 @@ int			ft_secure_gettime_ms(long int *time);
 //THREAD FUNCTIONS
 int			ft_create_threads(t_list **list);
 int			ft_join_threads(t_list *list);
-void		*ft_routine(void *arg);
 
+//ROUTINE
+void		*ft_routine(void *arg);
+int			ft_take_fork(t_list *list);
+int			ft_check_fork(t_list *list);
+void		ft_eat(t_philo *philo);
 //MESSAGES
 void		ft_msg_fork(t_list *list);
 

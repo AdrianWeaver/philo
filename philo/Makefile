@@ -48,8 +48,9 @@ test:				$(NAME)
 vtest:				$(NAME)
 					valgrind ./$(NAME) "5" "410" "200" "100" "5"
 
-sanitize:			$(SANITIZE_NAME)
-					./$(NAME) "2" "2" "3" "4" "5"
+sanitize:			clean
+					make $(SANITIZE_NAME)
+					./$(SANITIZE_NAME) "5" "410" "200" "100" "5"
 
 -include $(DEPS)
 .PHONY:	clean fclean re test sanity sanitize

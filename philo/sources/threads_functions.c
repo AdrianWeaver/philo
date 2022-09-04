@@ -16,9 +16,24 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-int	ft_odd_philo(t_list *list)
+int	ft_release_forks(t_list *list)
 {
-	t_philo *philo;
+	t_philo	*philo;
+
+	philo = (t_philo *)list->content;
+	pthread_mutex_lock(&(philo->m_fork));
+	philo->fork = 0;
+	pthread_mutex_unlock(&(philo->m_fork));
+	philo = (t_philo *)list->next->content;
+	pthread_mutex_lock(&(philo->m_fork));
+	philo->fork = 0;
+	pthread_mutex_unlock(&(philo->m_fork));
+	return (0);
+}
+
+int	ft_check_fork(t_list *list)
+{
+	t_philo	*philo;
 
 	philo = (t_philo *)list->content;
 	pthread_mutex_lock(&(philo->m_fork));
@@ -28,34 +43,59 @@ int	ft_odd_philo(t_list *list)
 		return (pthread_mutex_unlock(&(philo->m_fork)), 1);
 	}
 	pthread_mutex_unlock(&(philo->m_fork));
-	(void)philo;
 	return (0);
 }
 
-int	ft_even_philo(t_list *list)
-{
-	t_philo *philo;
-
-	philo = (t_philo *)list->content;
-	(void)philo;
-	return (0);
-}
+//int	ft_even_philo(t_list *list)
+//{
+	//t_philo	*philo;
+	//philo = (t_philo *)list->content;
+	//(void)philo;
+	//return (0);
+//}
 
 int	ft_take_forks(t_list	*list)
 {
 	t_philo	*philo;
+	int		first_fork;
+	int		second_fork;
 
+	first_fork = 0;
+	second_fork = 0;
 	philo = (t_philo *)list->content;
-	if (philo->philo_nb % 2 == 0)
-		ft_even_philo(list);
-	else
-		ft_odd_philo(list);
+	while (first_fork == 0)
+	{
+		if (philo->philo_nb % 2 == 0)
+			first_fork = ft_check_fork(list);
+		else
+			first_fork = ft_check_fork(list->next);
+	}
+	ft_msg_fork(list);
+	while (second_fork == 0)
+	{
+		if (philo->philo_nb % 2 == 0)
+			second_fork = ft_check_fork(list->next);
+		else
+			second_fork = ft_check_fork(list);
+	}
+	ft_msg_fork(list);
+	ft_eat(philo);
+	ft_release_forks(list);
 	return (-1);
 }
 
 void	ft_eat(t_philo *philo)
 {
-	(void)philo;
+	pthread_mutex_lock(&(philo->data->is_writing));
+	printf("%ld %i has started to eat\n", ft_get_current_time(philo->data),
+		philo->philo_nb);
+	pthread_mutex_unlock(&(philo->data->is_writing));
+	usleep(philo->data->time_to_eat * 1000);
+	ft_secure_gettime_ms(&(philo->last_meal));
+	pthread_mutex_lock(&(philo->data->is_writing));
+	printf("%ld %i has started to think\n", ft_get_current_time(philo->data),
+		philo->philo_nb);
+	pthread_mutex_unlock(&(philo->data->is_writing));
 }
 
 void	*ft_routine(void *arg)
@@ -66,17 +106,15 @@ void	*ft_routine(void *arg)
 
 	list = (t_list *)arg;
 	ft_secure_gettime_ms(&current);
-	philo = (t_philo *)list->content;
-	if (DEBUG)
-		printf("ROUTINE PHILO NB %i:\n", philo->philo_nb);
-	if (list->next && ft_take_forks(list) == 1)
-		ft_msg_fork(list);
-	pthread_mutex_lock(&(philo->data->is_writing));
-	printf("My id is %ld\n", philo->thread_id);
-	printf("My current time is %ld\n", (current - philo->data->start));
-	printf("routine start = %ld\nroutine curr  = %ld\n",
-		philo->data->start, current);
-	pthread_mutex_unlock(&(philo->data->is_writing));
+	ft_take_forks(list);
+	if (DEBUG_ROUTINE)
+	{
+		philo = (t_philo *)list->content;
+		pthread_mutex_lock(&(philo->data->is_writing));
+		printf("My id is %ld\n", philo->thread_id);
+		printf("My current time is %ld\n", ft_get_current_time(philo->data));
+		pthread_mutex_unlock(&(philo->data->is_writing));
+	}
 	return (NULL);
 }
 
