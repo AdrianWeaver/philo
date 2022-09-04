@@ -75,8 +75,8 @@ void	ft_init_philo_failed(int i, t_list *list)
 int	ft_init_philo_list(int i, t_philo *new_philo, t_list *list, t_data *data)
 {
 	new_philo->data = data;
-	new_philo->thread_id = i;
-	new_philo->philo_nb = i;
+	new_philo->thread_id = i + 1;
+	new_philo->philo_nb = i + 1;
 	new_philo->last_meal = data->start;
 	if (pthread_mutex_init(&(new_philo->m_fork), NULL))
 	{
@@ -137,6 +137,6 @@ int	ft_create_structure(t_data **data, char **argv)
 	if (pthread_mutex_init(&(*data)->is_writing, NULL))
 		exit (15);
 	ft_check_data(*data);
-	ft_secure_gettime_ms(&(*data)->start);
+	ft_secure_gettime_ms(&(*data)->zero_time);
 	return (0);
 }

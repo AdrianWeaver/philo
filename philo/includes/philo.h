@@ -41,6 +41,7 @@ typedef struct s_data
 	int				reaper;
 	pthread_mutex_t	is_writing;
 	time_t			start;
+	time_t			zero_time;
 }				t_data;
 
 typedef struct s_philo
@@ -50,6 +51,7 @@ typedef struct s_philo
 	t_data			*data;
 	pthread_mutex_t	m_fork;
 	time_t			last_meal;
+	time_t			current_time;
 	int				fork;
 }			t_philo;
 
@@ -81,6 +83,7 @@ void		*ft_routine(void *arg);
 int			ft_take_fork(t_list *list);
 int			ft_check_fork(t_list *list);
 void		ft_eat(t_philo *philo);
+void		ft_sleep(t_philo *philo);
 //MESSAGES
 void		ft_msg_fork(t_list *list);
 

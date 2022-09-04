@@ -18,8 +18,9 @@
 
 int	ft_set_time(t_data *data)
 {
-	if (ft_secure_gettime_ms(&(data->start)) == -1)
+	if (ft_secure_gettime_ms(&(data->zero_time)) == -1)
 		return (-1);
+	data->start = data->zero_time + 100;
 	return (0);
 }
 
@@ -59,10 +60,10 @@ int	main(int argc, char **argv)
 		return (1);
 	if (ft_create_structure(&data, argv) == -1)
 		return (2);
-	if (ft_set_time(data) == -1)
-		return (3);
 	if (ft_create_philo_list(&data, &list) == -1)
 		return (4);
+	if (ft_set_time(data) == -1)
+		return (3);
 	if (ft_create_threads(&list) == -1)
 		return (5);
 	printf("Exited everything went ok\n");

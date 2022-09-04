@@ -46,14 +46,6 @@ int	ft_check_fork(t_list *list)
 	return (0);
 }
 
-//int	ft_even_philo(t_list *list)
-//{
-	//t_philo	*philo;
-	//philo = (t_philo *)list->content;
-	//(void)philo;
-	//return (0);
-//}
-
 int	ft_take_forks(t_list	*list)
 {
 	t_philo	*philo;
@@ -70,6 +62,7 @@ int	ft_take_forks(t_list	*list)
 		else
 			first_fork = ft_check_fork(list->next);
 	}
+	philo->current_time = ft_get_current_time(philo->data);
 	ft_msg_fork(list);
 	while (second_fork == 0)
 	{
@@ -78,24 +71,35 @@ int	ft_take_forks(t_list	*list)
 		else
 			second_fork = ft_check_fork(list);
 	}
+	philo->current_time = ft_get_current_time(philo->data);
 	ft_msg_fork(list);
 	ft_eat(philo);
 	ft_release_forks(list);
+	ft_sleep(philo);
 	return (-1);
+}
+
+void	ft_sleep(t_philo *philo)
+{
+	pthread_mutex_lock(&(philo->data->is_writing));
+	printf("%ld #%i has started to sleep\n", ft_get_current_time(philo->data),
+		philo->philo_nb);
+	pthread_mutex_unlock(&(philo->data->is_writing));
+	usleep(philo->data->time_to_sleep * 1000);
+	pthread_mutex_lock(&(philo->data->is_writing));
+	printf("%ld #%i has started to think\n", ft_get_current_time(philo->data),
+		philo->philo_nb);
+	pthread_mutex_unlock(&(philo->data->is_writing));
 }
 
 void	ft_eat(t_philo *philo)
 {
 	pthread_mutex_lock(&(philo->data->is_writing));
-	printf("%ld %i has started to eat\n", ft_get_current_time(philo->data),
+	printf("%ld #%i has started to eat\n", ft_get_current_time(philo->data),
 		philo->philo_nb);
 	pthread_mutex_unlock(&(philo->data->is_writing));
 	usleep(philo->data->time_to_eat * 1000);
 	ft_secure_gettime_ms(&(philo->last_meal));
-	pthread_mutex_lock(&(philo->data->is_writing));
-	printf("%ld %i has started to think\n", ft_get_current_time(philo->data),
-		philo->philo_nb);
-	pthread_mutex_unlock(&(philo->data->is_writing));
 }
 
 void	*ft_routine(void *arg)
@@ -106,6 +110,9 @@ void	*ft_routine(void *arg)
 
 	list = (t_list *)arg;
 	ft_secure_gettime_ms(&current);
+	philo = (t_philo *)list->content;
+	while (current < philo->data->start)
+		ft_secure_gettime_ms(&current);
 	ft_take_forks(list);
 	if (DEBUG_ROUTINE)
 	{
