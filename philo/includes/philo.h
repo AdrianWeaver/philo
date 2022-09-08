@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 11:25:48 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/01 17:34:29 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/08 18:28:03 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ t_list		*ft_lstlast(t_list *lst);
 int			ft_create_philo_list(t_data **data, t_list **list);
 int			ft_create_structure(t_data **data, char **argv);
 
-time_t		ft_get_current_time(const t_data *data);
+int			ft_get_current_time(const t_data *data, time_t *current);
 int			ft_secure_gettime_ms(long int *time);
 
 //THREAD FUNCTIONS
@@ -86,5 +86,6 @@ void		ft_eat(t_philo *philo);
 void		ft_sleep(t_philo *philo);
 //MESSAGES
 void		ft_msg_fork(t_list *list);
+int			ft_print_msg(t_philo *philo, char *str);
 
 #endif

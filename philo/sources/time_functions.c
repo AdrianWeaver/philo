@@ -6,19 +6,20 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:33:29 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/01 14:45:09 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/08 18:30:01 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-time_t	ft_get_current_time(const t_data *data)
+int	ft_get_current_time(const t_data *data, time_t *current)
 {
-	time_t	current;
+	time_t	now;
 
-	if (ft_secure_gettime_ms(&current) == 1)
-		return (0);
-	return (current - data->start);
+	if (ft_secure_gettime_ms(&now) == 1)
+		return (1);
+	*current = now - data->start;
+	return (0);
 }
 
 int	ft_secure_gettime_ms(long int *time)

@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 17:42:59 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/01 17:56:35 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/08 18:18:01 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ int	ft_check_data(t_data *data)
 		printf("DATA: nb of philo=%d\n", data->number_of_philosophers);
 		printf("DATA: time to die=%d\n", data->time_to_die);
 		printf("DATA: time to eat=%d\n", data->time_to_eat);
-		printf("DATA: time to sleep=%d\n", data->time_to_sleep);
-		printf("DATA: nb of meals needed=%d\n",
-			data->number_of_times_each_philosopher_must_eat);
+		printf("DATA: time to sleep=%d\n", data->time_to_sleep); printf("DATA: nb of meals needed=%d\n", data->number_of_times_each_philosopher_must_eat);
 		printf("DATA: mutex address=%p\n", &data->is_writing);
 	}
 	if (DEBUG && DEBUG_DATA_ADDRESS)
@@ -77,6 +75,7 @@ int	ft_init_philo_list(int i, t_philo *new_philo, t_list *list, t_data *data)
 	new_philo->data = data;
 	new_philo->thread_id = i + 1;
 	new_philo->philo_nb = i + 1;
+	new_philo->fork = 0;
 	new_philo->last_meal = data->start;
 	if (pthread_mutex_init(&(new_philo->m_fork), NULL))
 	{

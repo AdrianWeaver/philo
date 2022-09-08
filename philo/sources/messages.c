@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 16:03:41 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/02 16:03:41 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/08 18:32:50 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,17 @@
 #include <pthread.h>
 #include <stdio.h>
 
-void	ft_msg_fork(t_list *list)
+int	ft_print_msg(t_philo *philo, char *str)
 {
-	t_philo	*philo;
+	time_t	current;
 
-	philo = list->content;
+	if (ft_get_current_time(philo->data, &current) == 1)
+		return (1);
+	//check if string printed is death.
+	//check if someone died in data structure
+	//check if meals are done.
 	pthread_mutex_lock(&(philo->data->is_writing));
-	printf("%ld #%i has taken a fork\n", philo->current_time, philo->philo_nb);
+	printf("%ld %i %s\n", current, philo->philo_nb, str);
 	pthread_mutex_unlock(&(philo->data->is_writing));
+	return (0);
 }

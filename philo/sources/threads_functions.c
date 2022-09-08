@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 08:38:08 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/02 08:38:08 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/08 18:32:23 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ int	ft_take_forks(t_list	*list)
 		else
 			first_fork = ft_check_fork(list->next);
 	}
-	philo->current_time = ft_get_current_time(philo->data);
-	ft_msg_fork(list);
+	if (ft_get_current_time(philo->data, &philo->current_time) == 1)
+		return (1);
+	ft_print_msg(philo, "has taken a fork");
 	while (second_fork == 0)
 	{
 		if (philo->philo_nb % 2 == 0)
@@ -71,8 +72,9 @@ int	ft_take_forks(t_list	*list)
 		else
 			second_fork = ft_check_fork(list);
 	}
-	philo->current_time = ft_get_current_time(philo->data);
-	ft_msg_fork(list);
+	if (ft_get_current_time(philo->data, &philo->current_time) == 1)
+		return (1);
+	ft_print_msg(philo, "has taken a fork");
 	ft_eat(philo);
 	ft_release_forks(list);
 	ft_sleep(philo);
@@ -81,23 +83,29 @@ int	ft_take_forks(t_list	*list)
 
 void	ft_sleep(t_philo *philo)
 {
-	pthread_mutex_lock(&(philo->data->is_writing));
-	printf("%ld #%i has started to sleep\n", ft_get_current_time(philo->data),
-		philo->philo_nb);
-	pthread_mutex_unlock(&(philo->data->is_writing));
+	//time_t	current_time;
+//
+	ft_print_msg(philo, "is sleeping");
+	//pthread_mutex_lock(&(philo->data->is_writing));
+	//printf("%ld #%i is sleeping\n", ft_get_current_time(philo->data),
+		//philo->philo_nb);
+	//pthread_mutex_unlock(&(philo->data->is_writing));
 	usleep(philo->data->time_to_sleep * 1000);
-	pthread_mutex_lock(&(philo->data->is_writing));
-	printf("%ld #%i has started to think\n", ft_get_current_time(philo->data),
-		philo->philo_nb);
-	pthread_mutex_unlock(&(philo->data->is_writing));
+	ft_print_msg(philo, "is thinking");
+	//pthread_mutex_lock(&(philo->data->is_writing));
+	//printf("%ld #%i is thinking\n", ft_get_current_time(philo->data),
+		//philo->philo_nb);
+	//pthread_mutex_unlock(&(philo->data->is_writing));
 }
 
 void	ft_eat(t_philo *philo)
 {
-	pthread_mutex_lock(&(philo->data->is_writing));
-	printf("%ld #%i has started to eat\n", ft_get_current_time(philo->data),
-		philo->philo_nb);
-	pthread_mutex_unlock(&(philo->data->is_writing));
+	ft_print_msg(philo, "is eating");
+	//pthread_mutex_lock(&(philo->data->is_writing));
+	//verif que personne n'est dead
+	//printf("%ld #%i is eating\n", ft_get_current_time(philo->data),
+		//philo->philo_nb);
+	//pthread_mutex_unlock(&(philo->data->is_writing));
 	usleep(philo->data->time_to_eat * 1000);
 	ft_secure_gettime_ms(&(philo->last_meal));
 }
@@ -119,7 +127,6 @@ void	*ft_routine(void *arg)
 		philo = (t_philo *)list->content;
 		pthread_mutex_lock(&(philo->data->is_writing));
 		printf("My id is %ld\n", philo->thread_id);
-		printf("My current time is %ld\n", ft_get_current_time(philo->data));
 		pthread_mutex_unlock(&(philo->data->is_writing));
 	}
 	return (NULL);
