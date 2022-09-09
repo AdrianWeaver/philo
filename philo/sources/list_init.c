@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 17:42:59 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 13:20:01 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 17:10:56 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	ft_check_philo(t_list *list)
 		philo = (t_philo *)list->content;
 		if (DEBUG && DEBUG_DATA)
 		{
-			printf("PHILO:philo nb %d\n", i);
+			printf("PHILO:philo nb %d\n", i + 1);
 			printf("PHILO:thread_id %ld\n", philo->thread_id);
 		}
 		i++;

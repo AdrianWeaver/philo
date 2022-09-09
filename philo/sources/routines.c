@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 09:10:38 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 16:45:36 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 17:03:52 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int	ft_eat(t_philo *philo)
 {
 	if (ft_print_msg(philo, "is eating") == -1)
 		return (-1);
+	if (ft_secure_gettime_ms(&(philo->last_meal)) == -1)
+		return (-1);
 	usleep(philo->data->time_to_eat * 1000);
 	philo->meals++;
 	if (philo->meals == philo->data->nb_of_times_each_philo_must_eat)
@@ -50,8 +52,6 @@ int	ft_eat(t_philo *philo)
 		philo->data->nb_of_philo_with_enough_meals++;
 		pthread_mutex_unlock(&(philo->data->m_end));
 	}
-	if (ft_secure_gettime_ms(&(philo->last_meal)) == -1)
-		return (-1);
 	return (0);
 }
 

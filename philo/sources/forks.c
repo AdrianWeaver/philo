@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 09:08:20 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 16:34:13 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 17:21:11 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,6 @@ int	ft_release_forks(t_list *list)
 	philo = (t_philo *)list->next->content;
 	pthread_mutex_lock(&(philo->m_fork));
 	philo->fork = 0;
-	pthread_mutex_unlock(&(philo->m_fork));
-	return (0);
-}
-
-int	ft_check_fork(t_list *list)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)list->content;
-	pthread_mutex_lock(&(philo->m_fork));
-	if (philo->fork == 0)
-	{
-		philo->fork = 1;
-		return (pthread_mutex_unlock(&(philo->m_fork)), 1);
-	}
 	pthread_mutex_unlock(&(philo->m_fork));
 	return (0);
 }
@@ -60,27 +45,46 @@ int	ft_check_if_you_are_dead(t_philo *philo)
 	return (0);
 }
 
-static int	ft_pick_up_a_fork(int fork, t_philo *philo, t_list *list)
+int	ft_check_fork(t_list *list, int fork)
 {
-	while (fork == 0)
+	int		fork_start;
+	t_philo	*philo;
+
+	fork_start = fork;
+	philo = (t_philo *)list->content;
+	while (fork == fork_start)
 	{
 		if (ft_check_if_you_are_dead(philo) == -1)
 			return (-1);
-		if (philo->philo_nb % 2 == 0)
-			return (ft_check_fork(list));
-		else
-			return (ft_check_fork(list->next));
+		pthread_mutex_lock(&(philo->m_fork));
+		if (philo->fork == 0)
+		{
+			philo->fork = 1;
+			fork++;
+		}
+		pthread_mutex_unlock(&(philo->m_fork));
 		usleep(5);
 	}
-	while (fork == 1)
+	return (1);
+}
+
+static int	ft_pick_up_a_fork(int fork, t_philo *philo, t_list *list)
+{
+	if (fork == 0)
+	{
+		if (philo->philo_nb % 2 == 0)
+			return (ft_check_fork(list, fork));
+		else
+			return (ft_check_fork(list->next, fork));
+	}
+	else if (fork == 1)
 	{
 		if (ft_check_if_you_are_dead(philo) == -1)
 			return (-1);
 		if (philo->philo_nb % 2 == 0)
-			return (fork + ft_check_fork(list->next));
+			return (ft_check_fork(list->next, fork));
 		else
-			return (fork + ft_check_fork(list));
-		usleep(5);
+			return (ft_check_fork(list, fork));
 	}
 	return (0);
 }

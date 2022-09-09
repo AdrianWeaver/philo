@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 11:25:48 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 13:04:21 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 17:21:42 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <time.h>
 
 # define T_PHILO "(t_philo *)list->content"
-# define DEBUG 1
+# define DEBUG 0
 # define DEBUG_DATA 0
 # define DEBUG_DATA_ADDRESS 0
 # define DEBUG_ROUTINE 0
@@ -86,7 +86,7 @@ int			ft_join_threads(t_list *list);
 //ROUTINE
 void		*ft_routine(void *arg);
 int			ft_take_forks_and_eat(t_list *list);
-int			ft_check_fork(t_list *list);
+int			ft_check_fork(t_list *list, int fork);
 int			ft_eat(t_philo *philo);
 int			ft_sleep(t_philo *philo);
 //MESSAGES
