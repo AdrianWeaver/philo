@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 11:25:48 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/01 17:34:29 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/08 18:28:03 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 
 # define T_PHILO "(t_philo *)list->content"
 # define DEBUG 1
-# define DEBUG_DATA 1
-# define DEBUG_DATA_ADDRESS 1
+# define DEBUG_DATA 0
+# define DEBUG_DATA_ADDRESS 0
+# define DEBUG_ROUTINE 0
 
 typedef struct s_list
 {
@@ -37,14 +38,20 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				number_of_times_each_philosopher_must_eat;
+	int				reaper;
 	pthread_mutex_t	is_writing;
 	time_t			start;
+	time_t			zero_time;
 }				t_data;
 
 typedef struct s_philo
 {
 	pthread_t		thread_id;
+	int				philo_nb;
 	t_data			*data;
+	pthread_mutex_t	m_fork;
+	time_t			last_meal;
+	time_t			current_time;
 	int				fork;
 }			t_philo;
 
@@ -64,12 +71,21 @@ t_list		*ft_lstlast(t_list *lst);
 int			ft_create_philo_list(t_data **data, t_list **list);
 int			ft_create_structure(t_data **data, char **argv);
 
-int			ft_get_current_time(const time_t start, time_t time);
+int			ft_get_current_time(const t_data *data, time_t *current);
 int			ft_secure_gettime_ms(long int *time);
 
 //THREAD FUNCTIONS
 int			ft_create_threads(t_list **list);
 int			ft_join_threads(t_list *list);
+
+//ROUTINE
 void		*ft_routine(void *arg);
+int			ft_take_fork(t_list *list);
+int			ft_check_fork(t_list *list);
+void		ft_eat(t_philo *philo);
+void		ft_sleep(t_philo *philo);
+//MESSAGES
+void		ft_msg_fork(t_list *list);
+int			ft_print_msg(t_philo *philo, char *str);
 
 #endif

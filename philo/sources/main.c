@@ -16,23 +16,11 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-int	ft_core_program(t_data *data)
+int	ft_set_time(t_data *data)
 {
-	long int				start;
-	long int				current_time;
-	int						i;
-
-	i = 0;
-	if (ft_secure_gettime_ms(&start) == -1)
+	if (ft_secure_gettime_ms(&(data->zero_time)) == -1)
 		return (-1);
-	while (i < 1)
-		i++;
-	if (ft_secure_gettime_ms(&current_time) == -1)
-		return (-1);
-	printf("start = %ld\n", start);
-	printf("current = %ld\n", current_time);
-	printf("time_spent = %ld\n", current_time - start);
-	(void)data;
+	data->start = data->zero_time + 100;
 	return (0);
 }
 
@@ -43,10 +31,10 @@ int	ft_check_args(int argc, char **argv)
 	i = 1;
 	if (argc != 6)
 	{
-		write(2, "Please provide the following arguments:\n", 41);
-		write(2, "number_of_philosophers, time_to_die, time_to_eat, ", 51);
-		write(2, "time_to_sleep, number_of_times_each_philosopher_must_eat\n",
-			58);
+		write(2, "Please provide the following arguments:\n", 40);
+		write(2, "\t- number_of_philosophers\n\t- time_to_die\n", 41);
+		write(2, "\t- time_to_eat\n\t- time_to_sleep\n", 32);
+		write(2, "\t- number_of_times_each_philosopher_must_eat\n", 45);
 		return (-1);
 	}
 	while (i < argc)
@@ -73,10 +61,10 @@ int	main(int argc, char **argv)
 	if (ft_create_structure(&data, argv) == -1)
 		return (2);
 	if (ft_create_philo_list(&data, &list) == -1)
+		return (4);
+	if (ft_set_time(data) == -1)
 		return (3);
 	if (ft_create_threads(&list) == -1)
-		return (4);
-	if (ft_core_program(data) == 1)
 		return (5);
 	printf("Exited everything went ok\n");
 	return (0);
