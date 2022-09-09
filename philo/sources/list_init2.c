@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 13:00:44 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 13:16:31 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 13:29:40 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ int	ft_init_data(t_data **data, int argc, char **argv)
 	(*data)->reaper = 0;
 	if (ft_secure_gettime_ms(&(*data)->zero_time) == -1)
 		return (-1);
+	(*data)->start = (*data)->zero_time + 100;
 	return (0);
 }
