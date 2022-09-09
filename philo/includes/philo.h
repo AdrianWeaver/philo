@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 11:25:48 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 09:46:15 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 11:07:51 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@ typedef struct s_data
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				number_of_times_each_philosopher_must_eat;
+	int				nb_of_times_each_philo_must_eat;
 	int				reaper;
 	pthread_mutex_t	is_writing;
+	pthread_mutex_t	m_end;
+	int				nb_of_philo_with_enough_meals;
 	time_t			start;
 	time_t			zero_time;
 }				t_data;
@@ -52,6 +54,7 @@ typedef struct s_philo
 	pthread_mutex_t	m_fork;
 	time_t			last_meal;
 	time_t			current_time;
+	int				meals;
 	int				fork;
 }			t_philo;
 
@@ -80,10 +83,10 @@ int			ft_join_threads(t_list *list);
 
 //ROUTINE
 void		*ft_routine(void *arg);
-int			ft_take_forks(t_list *list);
+int			ft_take_forks_and_eat(t_list *list);
 int			ft_check_fork(t_list *list);
-void		ft_eat(t_philo *philo);
-void		ft_sleep(t_philo *philo);
+int			ft_eat(t_philo *philo);
+int			ft_sleep(t_philo *philo);
 //MESSAGES
 void		ft_msg_fork(t_list *list);
 int			ft_print_msg(t_philo *philo, char *str);
