@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 17:42:59 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 13:04:04 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 13:20:01 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,5 @@ int	ft_create_structure(t_data **data, int argc, char **argv)
 	if (ft_init_mutex(*data) == -1)
 		return (free(*data), -1);
 	ft_check_data(*data);
-	if (ft_secure_gettime_ms(&(*data)->zero_time) == -1)
-		return (pthread_mutex_destroy(&(*data)->is_writing), free(*data), -1);
 	return (0);
 }

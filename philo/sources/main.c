@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 10:50:38 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 13:16:58 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 13:25:05 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_set_time(t_data *data)
 {
 	if (ft_secure_gettime_ms(&(data->zero_time)) == -1)
 		return (-1);
-	data->start = data->zero_time + 100;
+	data->start = data->zero_time;
 	return (0);
 }
 

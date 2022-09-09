@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 09:08:20 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 11:56:56 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 13:54:24 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ int	ft_check_if_you_are_dead(t_philo *philo)
 	if (current - philo->last_meal >= philo->data->time_to_die)
 	{
 		ft_print_msg(philo, "died");
+		pthread_mutex_lock(&(philo)->data->m_end);
+		philo->data->nb_of_philo_with_enough_meals
+			= philo->data->number_of_philosophers ;
+		pthread_mutex_unlock(&(philo)->data->m_end);
 		return (-1);
 	}
 	return (0);
