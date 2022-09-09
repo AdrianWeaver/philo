@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 09:08:20 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 11:53:28 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 11:56:56 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,8 @@ static int	ft_pick_up_a_fork(int fork, t_philo *philo, t_list *list)
 			else
 				fork += ft_check_fork(list->next);
 		}
-		return (fork);
 	}
-	if (fork == 1)
+	else if (fork == 1)
 	{
 		while (fork == 1)
 		{
@@ -82,7 +81,6 @@ static int	ft_pick_up_a_fork(int fork, t_philo *philo, t_list *list)
 			else
 				fork += ft_check_fork(list);
 		}
-		return (fork);
 	}
 	return (fork);
 }
