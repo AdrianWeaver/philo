@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 09:10:38 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 14:10:02 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 16:19:50 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,17 @@ int	ft_eat(t_philo *philo)
 	return (0);
 }
 
-void	ft_start_timer(time_t start)
+void	ft_start_timer(time_t start, t_philo *philo)
 {
 	time_t	current;
 
 	ft_secure_gettime_ms(&current);
 	while (current < start)
 	{
-		usleep(500);
+		usleep(100);
 	}
+	if (philo->philo_nb % 2 == 0)
+		usleep ((philo->data->time_to_eat / 2) * 1000);
 }
 
 void	*ft_routine(void *arg)
@@ -75,7 +77,7 @@ void	*ft_routine(void *arg)
 	list = (t_list *)arg;
 	ft_secure_gettime_ms(&current);
 	philo = (t_philo *)list->content;
-	ft_start_timer(philo->data->start);
+	ft_start_timer(philo->data->start, philo);
 	while (1)
 	{
 		if (ft_take_forks_and_eat(list) == -1)

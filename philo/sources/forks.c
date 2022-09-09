@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 09:08:20 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 13:54:24 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 16:34:13 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,27 @@ int	ft_check_if_you_are_dead(t_philo *philo)
 
 static int	ft_pick_up_a_fork(int fork, t_philo *philo, t_list *list)
 {
-	if (fork == 0)
+	while (fork == 0)
 	{
-		while (fork == 0)
-		{
-			if (ft_check_if_you_are_dead(philo) == -1)
-				return (-1);
-			if (philo->philo_nb % 2 == 0)
-				fork += ft_check_fork(list);
-			else
-				fork += ft_check_fork(list->next);
-		}
+		if (ft_check_if_you_are_dead(philo) == -1)
+			return (-1);
+		if (philo->philo_nb % 2 == 0)
+			return (ft_check_fork(list));
+		else
+			return (ft_check_fork(list->next));
+		usleep(5);
 	}
-	else if (fork == 1)
+	while (fork == 1)
 	{
-		while (fork == 1)
-		{
-			if (ft_check_if_you_are_dead(philo) == -1)
-				return (-1);
-			if (philo->philo_nb % 2 == 0)
-				fork += ft_check_fork(list->next);
-			else
-				fork += ft_check_fork(list);
-		}
+		if (ft_check_if_you_are_dead(philo) == -1)
+			return (-1);
+		if (philo->philo_nb % 2 == 0)
+			return (fork + ft_check_fork(list->next));
+		else
+			return (fork + ft_check_fork(list));
+		usleep(5);
 	}
-	return (fork);
+	return (0);
 }
 
 int	ft_take_forks_and_eat(t_list	*list)
