@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 10:50:38 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 11:17:55 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 13:16:58 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	ft_check_args(int argc, char **argv)
 	int	i;
 
 	i = 1;
-	if (argc != 6)
+	if (argc < 5 || argc > 6)
 	{
 		write(2, "Please provide the following arguments:\n", 40);
 		write(2, "\t- number_of_philosophers\n\t- time_to_die\n", 41);
 		write(2, "\t- time_to_eat\n\t- time_to_sleep\n", 32);
-		write(2, "\t- nb_of_times_each_philo_must_eat\n", 45);
+		write(2, "\t- nb_of_times_each_philo_must_eat\n", 35);
 		return (-1);
 	}
 	while (i < argc)
@@ -58,7 +58,7 @@ int	main(int argc, char **argv)
 	data = NULL;
 	if (ft_check_args(argc, argv) == -1)
 		return (0);
-	if (ft_create_structure(&data, argv) == -1)
+	if (ft_create_structure(&data, argc, argv) == -1)
 		return (0);
 	if (ft_create_philo_list(&data, &list) == -1)
 	{

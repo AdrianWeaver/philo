@@ -10,6 +10,7 @@ SRCS			=	main.c\
 					list_utils.c\
 					list_utils2.c\
 					list_init.c\
+					list_init2.c\
 					time_functions.c\
 					threads_functions.c\
 					messages.c\

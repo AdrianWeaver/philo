@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 11:25:48 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/09 11:07:51 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 13:04:21 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ int			ft_lstsize(t_list *list);
 t_list		*ft_lstnew(void *content);
 t_list		*ft_lstlast(t_list *lst);
 int			ft_create_philo_list(t_data **data, t_list **list);
-int			ft_create_structure(t_data **data, char **argv);
+int			ft_create_structure(t_data **data, int argc, char **argv);
+int			ft_init_data(t_data **data, int argc, char **argv);
+int			ft_init_mutex(t_data *data);
 
 int			ft_get_current_time(const t_data *data, time_t *current);
 int			ft_secure_gettime_ms(long int *time);
