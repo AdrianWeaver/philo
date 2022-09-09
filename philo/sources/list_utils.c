@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 13:57:08 by aweaver           #+#    #+#             */
-/*   Updated: 2022/08/25 13:57:08 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 09:33:45 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 
 t_list	*ft_lstnew(void *content)
 {
-	t_list	*ret;
+	t_list	*new;
 
-	ret = malloc(sizeof(*ret) * 1);
-	if (!ret)
+	new = malloc(sizeof(*new) * 1);
+	if (!new)
 		return (0);
-	ret->content = content;
-	ret->next = 0;
-	return (ret);
+	new->content = content;
+	new->next = NULL;
+	return (new);
 }
 
 t_list	*ft_lstlast(t_list *lst)
@@ -38,15 +38,20 @@ t_list	*ft_lstlast(t_list *lst)
 
 void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
+	int		i;
+	int		list_size;
 	t_list	*temp;
 	t_list	**ret;
 
+	list_size = ft_lstsize(*lst);
 	ret = lst;
-	while (*lst)
+	i = 0;
+	while (i < list_size)
 	{
 		temp = *lst;
 		*lst = (*lst)->next;
 		ft_lstdelone(temp, del);
+		i++;
 	}
 	lst = ret;
 }

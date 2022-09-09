@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 17:42:59 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/08 18:18:01 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 08:59:44 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ int	ft_check_data(t_data *data)
 		printf("DATA: nb of philo=%d\n", data->number_of_philosophers);
 		printf("DATA: time to die=%d\n", data->time_to_die);
 		printf("DATA: time to eat=%d\n", data->time_to_eat);
-		printf("DATA: time to sleep=%d\n", data->time_to_sleep); printf("DATA: nb of meals needed=%d\n", data->number_of_times_each_philosopher_must_eat);
+		printf("DATA: time to sleep=%d\n", data->time_to_sleep);
+		printf("DATA: nb of meals needed=%d\n",
+			data->number_of_times_each_philosopher_must_eat);
 		printf("DATA: mutex address=%p\n", &data->is_writing);
 	}
 	if (DEBUG && DEBUG_DATA_ADDRESS)
@@ -58,20 +60,10 @@ int	ft_check_philo(t_list *list)
 	return (0);
 }
 
-void	ft_init_philo_failed(int i, t_list *list)
-{
-	t_philo	*philo;
-
-	while (i > 0)
-	{
-		philo = (t_philo *)list->content;
-		pthread_mutex_destroy(&(philo->m_fork));
-		i--;
-	}
-}
-
 int	ft_init_philo_list(int i, t_philo *new_philo, t_list *list, t_data *data)
 {
+	t_list	*last;
+
 	new_philo->data = data;
 	new_philo->thread_id = i + 1;
 	new_philo->philo_nb = i + 1;
@@ -79,7 +71,9 @@ int	ft_init_philo_list(int i, t_philo *new_philo, t_list *list, t_data *data)
 	new_philo->last_meal = data->start;
 	if (pthread_mutex_init(&(new_philo->m_fork), NULL))
 	{
-		ft_init_philo_failed(i, list);
+		free(new_philo);
+		last = ft_lstlast(list);
+		last->next = NULL;
 		return (1);
 	}
 	return (0);
@@ -97,11 +91,9 @@ int	ft_create_philo_list(t_data **data, t_list **list)
 	{
 		new_philo = malloc(sizeof(*new_philo) * 1);
 		if (new_philo == NULL)
-			return (-1);
-		if (ft_init_philo_list(i, new_philo, *list, *data) == -1)
-		{
 			return (1);
-		}
+		if (ft_init_philo_list(i, new_philo, *list, *data) == 1)
+			return (1);
 		new = ft_lstnew((void *)new_philo);
 		ft_lstadd_back(list, new);
 		i++;
@@ -115,6 +107,8 @@ int	ft_create_philo_list(t_data **data, t_list **list)
 int	ft_create_structure(t_data **data, char **argv)
 {
 	*data = malloc(sizeof(**data) * 1);
+	if (*data == NULL)
+		return (-1);
 	(*data)->number_of_philosophers = ft_atoi(argv[1]);
 	(*data)->time_to_die = ft_atoi(argv[2]);
 	(*data)->time_to_eat = ft_atoi(argv[3]);
@@ -126,16 +120,14 @@ int	ft_create_structure(t_data **data, char **argv)
 		|| (*data)->number_of_times_each_philosopher_must_eat <= 0)
 	{
 		write(2, "Please provide positive values only\n", 36);
-		return (-1);
+		return (free(*data), -1);
 	}
 	if ((*data)->number_of_philosophers == 1)
-	{
 		write(2, "Why so sadistic?!\n", 18);
-		return (-1);
-	}
 	if (pthread_mutex_init(&(*data)->is_writing, NULL))
-		exit (15);
+		return (free(*data), -1);
 	ft_check_data(*data);
-	ft_secure_gettime_ms(&(*data)->zero_time);
+	if (ft_secure_gettime_ms(&(*data)->zero_time) == -1)
+		return (pthread_mutex_destroy(&(*data)->is_writing), free(*data), -1);
 	return (0);
 }

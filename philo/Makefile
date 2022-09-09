@@ -13,6 +13,8 @@ SRCS			=	main.c\
 					time_functions.c\
 					threads_functions.c\
 					messages.c\
+					forks.c\
+					routines.c\
 					philo_utils2.c
 
 OBJS			=	$(addprefix $(OBJS_PATH), $(SRCS:.c=.o))

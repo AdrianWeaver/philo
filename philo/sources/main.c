@@ -6,7 +6,7 @@
 /*   By: aweaver <aweaver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 10:50:38 by aweaver           #+#    #+#             */
-/*   Updated: 2022/09/01 17:57:39 by aweaver          ###   ########.fr       */
+/*   Updated: 2022/09/09 09:32:30 by aweaver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,23 @@ int	main(int argc, char **argv)
 	list = NULL;
 	data = NULL;
 	if (ft_check_args(argc, argv) == -1)
-		return (1);
+		return (0);
 	if (ft_create_structure(&data, argv) == -1)
-		return (2);
+		return (0);
 	if (ft_create_philo_list(&data, &list) == -1)
-		return (4);
+	{
+		ft_delete_data(data);
+		ft_lstclear(&list, ft_delete_philo);
+		return (0);
+	}
 	if (ft_set_time(data) == -1)
-		return (3);
-	if (ft_create_threads(&list) == -1)
-		return (5);
-	printf("Exited everything went ok\n");
+	{
+		ft_delete_data(data);
+		ft_lstclear(&list, ft_delete_philo);
+		return (0);
+	}
+	ft_create_threads(&list);
+	ft_delete_data(data);
+	ft_lstclear(&list, ft_delete_philo);
 	return (0);
 }
