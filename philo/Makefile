@@ -49,7 +49,7 @@ test:				$(NAME)
 					./$(NAME) "4" "310" "200" "100" "5"
 
 vtest:				$(NAME)
-					valgrind --tool=helgrind ./$(NAME) "5" "410" "200" "100" "5"
+					valgrind --tool=helgrind ./$(NAME) "4" "310" "200" "100" "5"
 
 sanitize:			clean
 					make $(SANITIZE_NAME)

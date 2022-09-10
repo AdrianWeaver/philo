@@ -86,9 +86,11 @@ int			ft_join_threads(t_list *list);
 //ROUTINE
 void		*ft_routine(void *arg);
 int			ft_take_forks_and_eat(t_list *list);
-int			ft_check_fork(t_list *list, int fork);
+int			ft_check_fork(t_philo *philo, t_list *list, int fork);
 int			ft_eat(t_philo *philo);
 int			ft_sleep(t_philo *philo);
+int			ft_think(t_philo *philo);
+int			ft_check_if_you_are_dead(t_philo *philo);
 //MESSAGES
 void		ft_msg_fork(t_list *list);
 int			ft_print_msg(t_philo *philo, char *str);

@@ -13,6 +13,15 @@
 #include "philo.h"
 #include <stdio.h>
 
+int	ft_think(t_philo *philo)
+{
+	if (ft_check_if_you_are_dead(philo) == -1)
+		return (-1);
+	else
+		ft_print_msg(philo, "is thinking");
+	return (0);
+}
+
 int	ft_sleep(t_philo *philo)
 {
 	time_t	current;
@@ -86,7 +95,7 @@ void	*ft_routine(void *arg)
 			return (NULL);
 		if (ft_sleep(philo) == -1)
 			return (NULL);
-		if (ft_print_msg(philo, "is thinking") == -1)
+		if (ft_think(philo) == -1)
 			return (NULL);
 	}
 	return (NULL);
