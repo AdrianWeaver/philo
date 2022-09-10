@@ -46,7 +46,7 @@ re:					fclean
 					@make $(NAME)
 
 test:				$(NAME)
-					./$(NAME) "5" "410" "200" "100" "5"
+					./$(NAME) "4" "310" "200" "100" "5"
 
 vtest:				$(NAME)
 					valgrind --tool=helgrind ./$(NAME) "5" "410" "200" "100" "5"
