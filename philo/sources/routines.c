@@ -53,7 +53,6 @@ int	ft_eat(t_philo *philo)
 		return (-1);
 	if (ft_secure_gettime_ms(&(philo->last_meal)) == -1)
 		return (-1);
-	usleep(philo->data->time_to_eat * 1000);
 	philo->meals++;
 	if (philo->meals == philo->data->nb_of_times_each_philo_must_eat)
 	{
@@ -61,6 +60,7 @@ int	ft_eat(t_philo *philo)
 		philo->data->nb_of_philo_with_enough_meals++;
 		pthread_mutex_unlock(&(philo->data->m_end));
 	}
+	usleep(philo->data->time_to_eat * 1000);
 	return (0);
 }
 
